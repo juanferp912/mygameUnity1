@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float playerJumpForce = 20f;
     public float playerSpeed = 5f;
     public Sprite[] mySprites;
     private int index = 0;
@@ -20,14 +19,25 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Salto
-        if (Input.GetKeyDown(KeyCode.Space))
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
+
+        myrigidbody2D.linearVelocity = new Vector2(moveX, moveY).normalized * playerSpeed;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Coin"))
         {
-            myrigidbody2D.linearVelocity = new Vector2(myrigidbody2D.linearVelocity.x, playerJumpForce);
+            Destroy(other.gameObject);
+            Debug.Log("¡Moneda recogida!");
         }
 
-        // Movimiento horizontal
-        myrigidbody2D.linearVelocity = new Vector2(playerSpeed, myrigidbody2D.linearVelocity.y);
+        if (other.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+            Debug.Log("¡Has muerto!");
+        }
     }
 
     IEnumerator WalkCoRoutine()

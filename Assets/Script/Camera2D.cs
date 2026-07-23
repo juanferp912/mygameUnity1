@@ -9,7 +9,7 @@ public class Camera2D : MonoBehaviour
         
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (targetPlayer != null)
         {
